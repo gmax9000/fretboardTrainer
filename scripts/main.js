@@ -1,5 +1,5 @@
 // basic data structure for the fretboard
-const gitScale = 1500
+const gitScale = 3000
 const fretboard = {
     boardColor: "brown",
     fretColor: "darkgoldenrod",
@@ -41,7 +41,7 @@ const fretboard = {
         },
     ]
 };
-const nutWidth = 20;
+const nutWidth = 2*fretboard.fretWidth;
 // svg preparation
 const svgns = "http://www.w3.org/2000/svg"
 const svg = document.querySelector("svg");
@@ -61,7 +61,7 @@ svg.appendChild(board);
 
 // creating the nut
 const nut = document.createElementNS(svgns, 'rect');
-nut.setAttribute("x", -nutWidth);
+nut.setAttribute("x", "0");
 nut.setAttribute("y", "0");
 nut.setAttribute("width", nutWidth);
 nut.setAttribute("height", fretboard.width);
@@ -98,7 +98,6 @@ oneDot.setAttribute("r", fretboard.fretWidth);
 oneDot.setAttribute("fill", "white");
 doubleDotAsset.appendChild(oneDot);
 defs.appendChild(doubleDotAsset);
-
 // second dot
 oneDot = document.createElementNS(svgns, 'circle');
 oneDot.setAttribute("cx", "0");
@@ -107,13 +106,24 @@ oneDot.setAttribute("r", fretboard.fretWidth);
 oneDot.setAttribute("fill", "white");
 doubleDotAsset.appendChild(oneDot);
 
+// stringAsset definition
+const stringAsset = document.createElementNS(svgns, 'line');
+stringAsset.setAttribute("id", "stringAsset");
+stringAsset.setAttribute("x1", "0");
+stringAsset.setAttribute("y1", "0");
+stringAsset.setAttribute("x2", fretboard.scale);
+stringAsset.setAttribute("y2", "0");
+stringAsset.setAttribute("stroke", fretboard.stringColor);
+
+defs.appendChild(stringAsset);
+
 // create list of fret positions
 const fretDivider = 18;
 const fretPositions = [];
 for (i = 0; i < fretboard.numOfFrets; i++) {
     fretPositions.push(
         (i === 0 ?
-            fretboard.scale / fretDivider :
+            (fretboard.scale / fretDivider) + nutWidth :
             fretPositions[i - 1] + ((fretboard.scale - fretPositions[i - 1]) / fretDivider)
         )
     );
@@ -158,23 +168,21 @@ for (i = 0; i < fretboard.numOfFrets; i++) {
  * the height of the graphic is what is called the width of a guitar 
  */
 const lastFretPosition = fretPositions[fretboard.numOfFrets - 1];
-const lastFretViewBuffer = 15;
-svg.setAttribute("viewBox", -nutWidth + " 0 " + (lastFretPosition + lastFretViewBuffer + nutWidth) + " " + fretboard.width);
+const lastFretViewBuffer = fretPositions[fretboard.numOfFrets - 1] - fretPositions[fretboard.numOfFrets - 2];
+svg.setAttribute("viewBox", "0" + " 0 " + (lastFretPosition + lastFretViewBuffer) + " " + fretboard.width);
 
-let stringPos = 5;
+let stringPos = fretboard.width/12;
 let stringDistance = (fretboard.width - (2 * stringPos)) / (fretboard.strings.length - 1);
-const strings = [];
 
 for (i = 0; i < fretboard.strings.length; i++) {
-    strings.push(document.createElementNS(svgns, 'rect'));
-    strings[i].setAttribute("x", -nutWidth);
-    strings[i].setAttribute("y", stringPos.toString());
-    strings[i].setAttribute("width", fretboard.scale);
-    strings[i].setAttribute("height", "5");
-    strings[i].setAttribute("fill", fretboard.stringColor);
-    strings[i].setAttribute("id", "string" + i);
+    let guitarString = document.createElementNS(svgns, 'use');
+    guitarString.setAttribute("x", "0");
+    guitarString.setAttribute("y", stringPos.toString());
+    guitarString.setAttribute("href", "#stringAsset")
+    guitarString.setAttribute("id", "string" + i);
+    guitarString.setAttribute("stroke-width", i + fretboard.fretWidth/1.5);
 
-    svg.appendChild(strings[i]);
+    svg.appendChild(guitarString);
 
     stringPos += stringDistance;
 }
