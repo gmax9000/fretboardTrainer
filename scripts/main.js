@@ -119,13 +119,13 @@ stringAsset.setAttribute("stroke", fretboard.stringColor);
 defs.appendChild(stringAsset);
 
 // create list of fret positions
-const fretDivider = 18;
+const remainingScaleDivider = 17.871; // it's called the rule of 18
 const fretPositions = [];
 for (i = 0; i < fretboard.numOfFrets; i++) {
     fretPositions.push(
         (i === 0 ?
-            (fretboard.scale / fretDivider) + nutWidth :
-            fretPositions[i - 1] + ((fretboard.scale - fretPositions[i - 1]) / fretDivider)
+            (fretboard.scale / remainingScaleDivider) + nutWidth :
+            fretPositions[i - 1] + ((fretboard.scale - fretPositions[i - 1]) / remainingScaleDivider)
         )
     );
 }
