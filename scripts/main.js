@@ -1,3 +1,11 @@
+// svg element
+const svgns = "http://www.w3.org/2000/svg"
+const svg = document.querySelector("svg");
+
+// defs element
+const defs = document.createElementNS(svgns, "defs");
+svg.appendChild(defs);
+
 // basic data structure for the fretboard
 const gitScale = 3000
 const fretboard = {
@@ -42,13 +50,6 @@ const fretboard = {
     ]
 };
 const nutWidth = 2*fretboard.fretWidth;
-// svg preparation
-const svgns = "http://www.w3.org/2000/svg"
-const svg = document.querySelector("svg");
-
-// defs element
-const defs = document.createElementNS(svgns, "defs");
-svg.appendChild(defs);
 
 // creating the board
 const board = document.createElementNS(svgns, 'rect');
@@ -69,13 +70,14 @@ nut.setAttribute("fill", "white");
 svg.appendChild(nut);
 
 // fretAsset definition
-const fretAsset = document.createElementNS(svgns, 'rect');
+const fretAsset = document.createElementNS(svgns, 'line');
 fretAsset.setAttribute("id", "fretAsset");
-fretAsset.setAttribute("x", "0");
-fretAsset.setAttribute("y", "0");
-fretAsset.setAttribute("width", fretboard.fretWidth);
-fretAsset.setAttribute("height", fretboard.width);
-fretAsset.setAttribute("fill", fretboard.fretColor);
+fretAsset.setAttribute("x1", "0");
+fretAsset.setAttribute("y1", "0");
+fretAsset.setAttribute("x2", "0");
+fretAsset.setAttribute("y2", fretboard.width);
+fretAsset.setAttribute("stroke", fretboard.fretColor);
+fretAsset.setAttribute("stroke-width", fretboard.fretWidth);
 defs.appendChild(fretAsset);
 
 // dotAsset definition
@@ -114,7 +116,6 @@ stringAsset.setAttribute("y1", "0");
 stringAsset.setAttribute("x2", fretboard.scale);
 stringAsset.setAttribute("y2", "0");
 stringAsset.setAttribute("stroke", fretboard.stringColor);
-
 defs.appendChild(stringAsset);
 
 // create list of fret positions
@@ -129,61 +130,66 @@ for (i = 0; i < fretboard.numOfFrets; i++) {
     );
 }
 
-// single dot positions
+// single dot positions (repeated after 12th fret)
 const singleDotPos = [3, 5, 7, 9];
 
-//let fret;
+// place frets and dots in svg
 for (i = 0; i < fretboard.numOfFrets; i++) {
     let fret = document.createElementNS(svgns, 'use');
-    fret.setAttribute("x", fretPositions[i] - fretboard.fretWidth / 2);
+    fret.setAttribute("x", fretPositions[i]);
     fret.setAttribute("y", "0");
     fret.setAttribute("href", "#fretAsset");
-    fret.setAttribute("id", "fret" + (i + 1));
+    fret.setAttribute("id", "fret" + (i + 1)); //can't override def attributes, do I need it?
 
     svg.appendChild(fret);
 
+    // place single dots at 3 5 7 9 repeat from 12th
     if (singleDotPos.indexOf((i+1) % 12 ) !== -1) {
         let dot = document.createElementNS(svgns, 'use');
         dot.setAttribute("x", (fretPositions[i] + fretPositions[i-1]) / 2);
         dot.setAttribute("y", "50%");
         dot.setAttribute("href", "#dotAsset");
-        dot.setAttribute("id", "fret" + (i + 1));  
+        dot.setAttribute("id", "dot" + (i + 1)); //can't override def attributes, do I need it?
         
         svg.appendChild(dot)
     }
 
+    // place double dots at every 12th fret
     if ((i+1)%12 === 0) {
         let dot = document.createElementNS(svgns, 'use');
         dot.setAttribute("x", (fretPositions[i] + fretPositions[i-1]) / 2);
         dot.setAttribute("y", "0");
         dot.setAttribute("href", "#doubleDotAsset");
-        dot.setAttribute("id", "fret" + (i + 1));  
+        dot.setAttribute("id", "dot" + (i + 1)); //can't override def attributes, do I need it?
         
         svg.appendChild(dot)
     }
 }
 
-/**
- * the width of the graphic is the position of the last fret with some buffer
- * the height of the graphic is what is called the width of a guitar 
- */
-const lastFretPosition = fretPositions[fretboard.numOfFrets - 1];
-const lastFretViewBuffer = fretPositions[fretboard.numOfFrets - 1] - fretPositions[fretboard.numOfFrets - 2];
-svg.setAttribute("viewBox", "0" + " 0 " + (lastFretPosition + lastFretViewBuffer) + " " + fretboard.width);
-
+// calculate string starting position and distance between strings
 let stringPos = fretboard.width/12;
 let stringDistance = (fretboard.width - (2 * stringPos)) / (fretboard.strings.length - 1);
 
+// place strings
 for (i = 0; i < fretboard.strings.length; i++) {
     let guitarString = document.createElementNS(svgns, 'use');
     guitarString.setAttribute("x", "0");
     guitarString.setAttribute("y", stringPos.toString());
     guitarString.setAttribute("href", "#stringAsset")
-    guitarString.setAttribute("id", "string" + i);
     guitarString.setAttribute("stroke-width", i + fretboard.fretWidth/1.5);
+    guitarString.setAttribute("id", "string" + i);  //can't override def attributes, do I need it?
 
     svg.appendChild(guitarString);
 
     stringPos += stringDistance;
 }
 
+/**
+ * place viewbox
+ * 
+ * the width of the graphic is the position of the last fret with some buffer
+ * the height of the graphic is what is called the width of a guitar 
+ */
+const lastFretPosition = fretPositions[fretboard.numOfFrets - 1];
+const lastFretViewBuffer = fretPositions[fretboard.numOfFrets - 1] - fretPositions[fretboard.numOfFrets - 2];
+svg.setAttribute("viewBox", "0" + " 0 " + (lastFretPosition + lastFretViewBuffer) + " " + fretboard.width);
