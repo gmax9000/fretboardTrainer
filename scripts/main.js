@@ -118,18 +118,22 @@ stringAsset.setAttribute("y2", "0");
 stringAsset.setAttribute("stroke", fretboard.stringColor);
 defs.appendChild(stringAsset);
 
-// create list of fret positions
-const remainingScaleDivider = 17.871; // it's called the rule of 18
-const fretPositions = [];
-for (i = 0; i < fretboard.numOfFrets; i++) {
-    fretPositions.push(
-        (i === 0 ?
-            (fretboard.scale / remainingScaleDivider) + nutWidth :
-            fretPositions[i - 1] + ((fretboard.scale - fretPositions[i - 1]) / remainingScaleDivider)
-        )
-    );
+// takes a guitar and returns an array of fret positions
+function calculateFretPositions(guitar) {
+    const remainingScaleDivider = 17.871; // it's called the rule of 18
+    const fretPositions = [];
+    for (i = 0; i < guitar.numOfFrets; i++) {
+        fretPositions.push(
+            (i === 0 ?
+                (guitar.scale / remainingScaleDivider) + nutWidth :
+                fretPositions[i - 1] + ((guitar.scale - fretPositions[i - 1]) / remainingScaleDivider)
+            )
+        );
+    }
+    return fretPositions;
 }
 
+const fretPositions = calculateFretPositions(fretboard);
 // single dot positions (repeated after 12th fret)
 const singleDotPos = [3, 5, 7, 9];
 
