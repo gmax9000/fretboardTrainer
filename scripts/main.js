@@ -188,21 +188,27 @@ for (i = 0; i < fretboard.numOfFrets; i++) {
 }
 
 // calculate string starting position and distance between strings
-let stringPos = fretboard.width/12;
-let stringDistance = (fretboard.width - (2 * stringPos)) / (fretboard.strings.length - 1);
+
+function calculateStringPositions(guitar) {
+    const positions = [guitar.width / 12];
+    const stringDistance = (guitar.width - (2 * positions[0])) / (guitar.strings.length - 1); // TODO: check against div by zero
+    for (i = 1; i < guitar.strings.length; i++) {
+        positions.push(positions[i - 1] + stringDistance);
+    };
+    return positions;
+}
+const stringPositions = calculateStringPositions(fretboard);
 
 // place strings
 for (i = 0; i < fretboard.strings.length; i++) {
     let guitarString = document.createElementNS(svgns, 'use');
     guitarString.setAttribute("x", "0");
-    guitarString.setAttribute("y", stringPos.toString());
+    guitarString.setAttribute("y", stringPositions[i]);
     guitarString.setAttribute("href", "#stringAsset")
     guitarString.setAttribute("stroke-width", i + fretboard.fretWidth/1.5);
     guitarString.setAttribute("id", "string" + i);  //can't override def attributes, do I need it?
 
     svg.appendChild(guitarString);
-
-    stringPos += stringDistance;
 }
 
 /**
