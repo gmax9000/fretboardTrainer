@@ -16,7 +16,7 @@ const fretboard = {
     scale: gitScale,
     width: gitScale / 10,
     numOfFrets: 24,
-    fretWidth: gitScale/300,
+    fretWidth: gitScale / 300,
 
     // single dot positions (repeated after 12th fret)
     singleDotPos: [3, 5, 7, 9],
@@ -53,7 +53,7 @@ const fretboard = {
         },
     ]
 };
-const nutWidth = 2*fretboard.fretWidth;
+const nutWidth = 2 * fretboard.fretWidth;
 
 // creating the board
 const board = document.createElementNS(svgns, 'rect');
@@ -101,7 +101,7 @@ doubleDotAsset.setAttribute("id", "doubleDotAsset");
 // first dot
 let oneDot = document.createElementNS(svgns, 'circle');
 oneDot.setAttribute("cx", "0");
-oneDot.setAttribute("cy", fretboard.width/3);
+oneDot.setAttribute("cy", fretboard.width / 3);
 oneDot.setAttribute("r", fretboard.fretWidth);
 oneDot.setAttribute("fill", "white");
 doubleDotAsset.appendChild(oneDot);
@@ -109,7 +109,7 @@ defs.appendChild(doubleDotAsset);
 // second dot
 oneDot = document.createElementNS(svgns, 'circle');
 oneDot.setAttribute("cx", "0");
-oneDot.setAttribute("cy", fretboard.width*2/3);
+oneDot.setAttribute("cy", fretboard.width * 2 / 3);
 oneDot.setAttribute("r", fretboard.fretWidth);
 oneDot.setAttribute("fill", "white");
 doubleDotAsset.appendChild(oneDot);
@@ -141,13 +141,13 @@ function calculateFretPositions(guitar) {
 const fretPositions = calculateFretPositions(fretboard);
 
 // takes an array of fret positions and returns an array of fret centers
-function calculateFretCenterX(fretPositions){
+function calculateFretCenterX(fretPositions) {
     const fretCenters = [];
-    for(i=0;i<fretPositions.length;i++){
-        if(i===0){
-            fretCenters.push(fretPositions[i]/2);
+    for (i = 0; i < fretPositions.length; i++) {
+        if (i === 0) {
+            fretCenters.push(fretPositions[i] / 2);
         } else {
-            fretCenters.push((fretPositions[i]+fretPositions[i-1])/2);
+            fretCenters.push((fretPositions[i] + fretPositions[i - 1]) / 2);
         }
     }
     return fretCenters;
@@ -165,24 +165,24 @@ for (i = 0; i < fretboard.numOfFrets; i++) {
     svg.appendChild(fret);
 
     // place single dots at 3 5 7 9 repeat from 12th
-    if (fretboard.singleDotPos.indexOf((i+1) % 12 ) !== -1) {
+    if (fretboard.singleDotPos.indexOf((i + 1) % 12) !== -1) {
         let dot = document.createElementNS(svgns, 'use');
         dot.setAttribute("x", fretCenters[i]);
         dot.setAttribute("y", "50%");
         dot.setAttribute("href", "#dotAsset");
         dot.setAttribute("id", "dotAtFret_" + (i + 1)); //can't override def attributes, do I need it?
-        
+
         svg.appendChild(dot)
     }
 
     // place double dots at every 12th fret
-    if ((i+1)%12 === 0) {
+    if ((i + 1) % 12 === 0) {
         let dot = document.createElementNS(svgns, 'use');
         dot.setAttribute("x", fretCenters[i]);
         dot.setAttribute("y", "0");
         dot.setAttribute("href", "#doubleDotAsset");
         dot.setAttribute("id", "dotsAtFret_" + (i + 1)); //can't override def attributes, do I need it?
-        
+
         svg.appendChild(dot)
     }
 }
@@ -205,7 +205,7 @@ for (i = 0; i < fretboard.strings.length; i++) {
     guitarString.setAttribute("x", "0");
     guitarString.setAttribute("y", stringPositions[i]);
     guitarString.setAttribute("href", "#stringAsset")
-    guitarString.setAttribute("stroke-width", i + fretboard.fretWidth/1.5);
+    guitarString.setAttribute("stroke-width", i + fretboard.fretWidth / 1.5);
     guitarString.setAttribute("id", "string" + i);  //can't override def attributes, do I need it?
 
     svg.appendChild(guitarString);
