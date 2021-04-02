@@ -92,7 +92,6 @@ dotAsset.setAttribute("id", "dotAsset");
 dotAsset.setAttribute("cx", "0");
 dotAsset.setAttribute("cy", "0");
 dotAsset.setAttribute("r", fretboard.fretWidth);
-dotAsset.setAttribute("fill", "white");
 defs.appendChild(dotAsset);
 
 // doubleDotAsset definition
@@ -169,6 +168,7 @@ for (i = 0; i < fretboard.numOfFrets; i++) {
         let dot = document.createElementNS(svgns, 'use');
         dot.setAttribute("x", fretCenters[i]);
         dot.setAttribute("y", "50%");
+        dot.setAttribute("fill", "white");
         dot.setAttribute("href", "#dotAsset");
         dot.setAttribute("id", "dotAtFret_" + (i + 1)); //can't override def attributes, do I need it?
 
@@ -211,6 +211,17 @@ for (i = 0; i < fretboard.strings.length; i++) {
     svg.appendChild(guitarString);
 }
 
+for (i = 0; i < stringPositions.length; i++) {
+    for (j = 0; j < fretPositions.length; j++) {
+        let noteDot = document.createElementNS(svgns, 'use');
+        noteDot.setAttribute("x", fretCenters[j]);
+        noteDot.setAttribute("y", stringPositions[i]);
+        noteDot.setAttribute("id", "note_" + j + (i * fretPositions.length));
+        noteDot.setAttribute("href", "#dotAsset");
+        noteDot.setAttribute("fill", "red");
+        svg.appendChild(noteDot);        
+    }
+}
 /**
  * place viewbox
  * 
