@@ -17,6 +17,7 @@ const fretboard = {
     width: gitScale / 10,
     numOfFrets: 24,
     fretWidth: gitScale / 300,
+    nutWidth: gitScale / 150,
 
     // single dot positions (repeated after 12th fret)
     singleDotPos: [3, 5, 7, 9],
@@ -53,7 +54,6 @@ const fretboard = {
         },
     ]
 };
-const nutWidth = 2 * fretboard.fretWidth;
 
 // creating the board
 const board = document.createElementNS(svgns, 'rect');
@@ -69,7 +69,7 @@ svg.appendChild(board);
 const nut = document.createElementNS(svgns, 'rect');
 nut.setAttribute("x", "0");
 nut.setAttribute("y", "0");
-nut.setAttribute("width", nutWidth);
+nut.setAttribute("width", fretboard.nutWidth);
 nut.setAttribute("height", fretboard.width);
 nut.setAttribute("fill", "white");
 nut.setAttribute("id", "nut");
@@ -129,7 +129,7 @@ function calculateFretPositions(guitar) {
     const fretPositions = [];
     for (i = 0; i < guitar.numOfFrets; i++) {
         if (i === 0) {
-            fretPositions.push((guitar.scale / remainingScaleDivider) + nutWidth);
+            fretPositions.push((guitar.scale / remainingScaleDivider) + fretboard.nutWidth);
         } else {
             fretPositions.push(fretPositions[i - 1] + ((guitar.scale - fretPositions[i - 1]) / remainingScaleDivider));
         }
@@ -216,7 +216,7 @@ for (i = 0; i < stringPositions.length; i++) {
         let noteDot = document.createElementNS(svgns, 'use');
         noteDot.setAttribute("x", fretCenters[j]);
         noteDot.setAttribute("y", stringPositions[i]);
-        noteDot.setAttribute("id", "note_" + j + (i * fretPositions.length));
+        noteDot.setAttribute("id", "note_" + (j + (i * fretPositions.length)));
         noteDot.setAttribute("href", "#dotAsset");
         noteDot.setAttribute("fill", "red");
         svg.appendChild(noteDot);        
