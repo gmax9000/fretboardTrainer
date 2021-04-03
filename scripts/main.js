@@ -7,7 +7,7 @@ const defs = document.createElementNS(svgns, "defs");
 svg.appendChild(defs);
 
 // basic data structure for the fretboard
-const gitScale = 3000
+const gitScale = 1000
 const fretboard = {
     boardColor: "brown",
     fretColor: "darkgoldenrod",
@@ -205,7 +205,7 @@ for (i = 0; i < fretboard.strings.length; i++) {
     guitarString.setAttribute("x", "0");
     guitarString.setAttribute("y", stringPositions[i]);
     guitarString.setAttribute("href", "#stringAsset")
-    guitarString.setAttribute("stroke-width", i + fretboard.fretWidth / 1.5);
+    guitarString.setAttribute("stroke-width", i*(fretboard.fretWidth / 10) + (fretboard.fretWidth * 2 / 3));
     guitarString.setAttribute("id", "string" + i);  //can't override def attributes, do I need it?
 
     svg.appendChild(guitarString);
