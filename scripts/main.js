@@ -86,32 +86,40 @@ fretAsset.setAttribute("stroke", fretboard.fretColor);
 fretAsset.setAttribute("stroke-width", fretboard.fretWidth);
 defs.appendChild(fretAsset);
 
-// dotAsset definition
-const dotAsset = document.createElementNS(svgns, 'circle');
-dotAsset.setAttribute("id", "dotAsset");
-dotAsset.setAttribute("cx", "0");
-dotAsset.setAttribute("cy", "0");
-dotAsset.setAttribute("r", fretboard.fretWidth);
-defs.appendChild(dotAsset);
+// whiteDotAsset definition
+const whiteDotAsset = document.createElementNS(svgns, 'circle');
+whiteDotAsset.setAttribute("id", "whiteDotAsset");
+whiteDotAsset.setAttribute("cx", "0");
+whiteDotAsset.setAttribute("cy", "0");
+whiteDotAsset.setAttribute("fill", "white");
+whiteDotAsset.setAttribute("r", fretboard.fretWidth);
+defs.appendChild(whiteDotAsset);
+
+// redDotAsset definition
+const redDotAsset = document.createElementNS(svgns, 'circle');
+redDotAsset.setAttribute("id", "redDotAsset");
+redDotAsset.setAttribute("cx", "0");
+redDotAsset.setAttribute("cy", "0");
+redDotAsset.setAttribute("fill", "red");
+redDotAsset.setAttribute("r", 1.5 * fretboard.fretWidth);
+defs.appendChild(redDotAsset);
 
 // doubleDotAsset definition
 const doubleDotAsset = document.createElementNS(svgns, 'g');
 doubleDotAsset.setAttribute("id", "doubleDotAsset");
 // first dot
-let oneDot = document.createElementNS(svgns, 'circle');
-oneDot.setAttribute("cx", "0");
-oneDot.setAttribute("cy", fretboard.width / 3);
-oneDot.setAttribute("r", fretboard.fretWidth);
-oneDot.setAttribute("fill", "white");
+let oneDot = document.createElementNS(svgns, 'use');
+oneDot.setAttribute("x", "0");
+oneDot.setAttribute("y", fretboard.width / 3);
+oneDot.setAttribute("href", "#whiteDotAsset");
+doubleDotAsset.appendChild(oneDot);
+// second dot
+oneDot = document.createElementNS(svgns, 'use');
+oneDot.setAttribute("x", "0");
+oneDot.setAttribute("y", fretboard.width * 2 / 3);
+oneDot.setAttribute("href", "#whiteDotAsset");
 doubleDotAsset.appendChild(oneDot);
 defs.appendChild(doubleDotAsset);
-// second dot
-oneDot = document.createElementNS(svgns, 'circle');
-oneDot.setAttribute("cx", "0");
-oneDot.setAttribute("cy", fretboard.width * 2 / 3);
-oneDot.setAttribute("r", fretboard.fretWidth);
-oneDot.setAttribute("fill", "white");
-doubleDotAsset.appendChild(oneDot);
 
 // stringAsset definition
 const stringAsset = document.createElementNS(svgns, 'line');
@@ -168,8 +176,7 @@ for (i = 0; i < fretboard.numOfFrets; i++) {
         let dot = document.createElementNS(svgns, 'use');
         dot.setAttribute("x", fretCenters[i]);
         dot.setAttribute("y", "50%");
-        dot.setAttribute("fill", "white");
-        dot.setAttribute("href", "#dotAsset");
+        dot.setAttribute("href", "#whiteDotAsset");
         dot.setAttribute("id", "dotAtFret_" + (i + 1)); //can't override def attributes, do I need it?
 
         svg.appendChild(dot)
@@ -211,13 +218,14 @@ for (i = 0; i < fretboard.strings.length; i++) {
     svg.appendChild(guitarString);
 }
 
+// place red dots
 for (i = 0; i < stringPositions.length; i++) {
     for (j = 0; j < fretPositions.length; j++) {
         let noteDot = document.createElementNS(svgns, 'use');
         noteDot.setAttribute("x", fretCenters[j]);
         noteDot.setAttribute("y", stringPositions[i]);
         noteDot.setAttribute("id", "note_" + (j + (i * fretPositions.length)));
-        noteDot.setAttribute("href", "#dotAsset");
+        noteDot.setAttribute("href", "#redDotAsset");
         noteDot.setAttribute("fill", "red");
         svg.appendChild(noteDot);        
     }
