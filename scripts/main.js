@@ -231,3 +231,26 @@ for (i = 0; i < stringPositions.length; i++) {
 const lastFretPosition = fretPositions[fretboard.numOfFrets - 1];
 const lastFretViewBuffer = fretPositions[fretboard.numOfFrets - 1] - fretPositions[fretboard.numOfFrets - 2];
 svg.setAttribute("viewBox", "0" + " 0 " + (lastFretPosition + lastFretViewBuffer) + " " + fretboard.width);
+
+let body = document.querySelector("body")
+let noteListParagraph = document.createElement("p");
+
+const basicNotes = ["a"];
+for (i=1; i< 12; i++){
+    if(basicNotes[i-1] === "b" || basicNotes[i-1] === "e" || basicNotes[i-1].indexOf("#") !== -1){
+        basicNotes.push(String.fromCharCode((basicNotes[i-1].charCodeAt(0) + 1)));
+    } else {
+        basicNotes.push(basicNotes[i-1] + "#")
+    }
+}
+// take a number, return a note
+function numberToNote(noteNumber){
+    return basicNotes[noteNumber%12];
+}
+
+let noteList = "";
+for (i =0; i<27; i++){
+    noteList += numberToNote(i) + ", ";
+}
+noteListParagraph.textContent = noteList;
+body.appendChild(noteListParagraph);
