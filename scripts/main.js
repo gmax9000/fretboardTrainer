@@ -69,10 +69,16 @@ function numberToNote(noteNumber){
     return basicNotes[noteNumber%12];
 }
 
-let noteList = "";
-for (i =0; i<27; i++){
-    noteList += numberToNote(i) + ", ";
+// create notes on one string
+function notesOnString(startingNoteAsNumber, numberOfFrets){
+    let notesOnString = [];
+    for(i = startingNoteAsNumber; i < startingNoteAsNumber + numberOfFrets; i++){
+        notesOnString.push(numberToNote(i));
+    }
+    return notesOnString;
 }
+
+let noteList = notesOnString(5, 24).toString();
 
 // testcode
 let body = document.querySelector("body")
@@ -177,7 +183,7 @@ function calculateFretCenterX(fretPositions) {
     const fretCenters = [];
     for (i = 0; i < fretPositions.length; i++) {
         if (i === 0) {
-            fretCenters.push(fretPositions[i] / 2);
+            fretCenters.push((fretPositions[i] + fretboard.nutWidth) / 2);
         } else {
             fretCenters.push((fretPositions[i] + fretPositions[i - 1]) / 2);
         }
@@ -245,6 +251,27 @@ for (i = 0; i < fretboard.strings.length; i++) {
 
 // place red dots and notenames
 for (i = 0; i < stringPositions.length; i++) {
+
+    // place nut note
+    let nutDot = document.createElementNS(svgns, 'use');
+        nutDot.setAttribute("x", fretboard.nutWidth/2);
+        nutDot.setAttribute("y", stringPositions[i]);
+        nutDot.setAttribute("id", "note_nut");
+        nutDot.setAttribute("href", "#redDotAsset");
+        nutDot.setAttribute("fill", "red");
+        svg.appendChild(nutDot);
+        
+        let nutText = document.createElementNS(svgns, 'text');
+        nutText.setAttribute("fill", "white");
+        nutText.setAttribute("font-size", fretboard.fretWidth*2.5);
+        let textNode = document.createTextNode("a#");
+        nutText.appendChild(textNode);
+
+        svg.appendChild(nutText);
+        let nutBox = nutText.getBBox();
+        nutText.setAttribute("x", - nutBox.width/8);
+        nutText.setAttribute("y", stringPositions[i] + nutBox.height/4);
+
     for (j = 0; j < fretPositions.length; j++) {
         let noteDot = document.createElementNS(svgns, 'use');
         noteDot.setAttribute("x", fretCenters[j]);
@@ -275,5 +302,5 @@ for (i = 0; i < stringPositions.length; i++) {
  */
 const lastFretPosition = fretPositions[fretboard.numOfFrets - 1];
 const lastFretViewBuffer = fretPositions[fretboard.numOfFrets - 1] - fretPositions[fretboard.numOfFrets - 2];
-svg.setAttribute("viewBox", "0" + " 0 " + (lastFretPosition + lastFretViewBuffer) + " " + fretboard.width);
+svg.setAttribute("viewBox", "-5" + " 0 " + (lastFretPosition + lastFretViewBuffer) + " " + fretboard.width);
 
