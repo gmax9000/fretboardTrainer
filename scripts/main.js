@@ -55,9 +55,6 @@ const fretboard = {
     ]
 };
 
-let body = document.querySelector("body")
-let noteListParagraph = document.createElement("p");
-
 const basicNotes = ["a"];
 for (i=1; i< 12; i++){
     if(basicNotes[i-1] === "b" || basicNotes[i-1] === "e" || basicNotes[i-1].indexOf("#") !== -1){
@@ -66,6 +63,7 @@ for (i=1; i< 12; i++){
         basicNotes.push(basicNotes[i-1] + "#")
     }
 }
+
 // take a number, return a note
 function numberToNote(noteNumber){
     return basicNotes[noteNumber%12];
@@ -75,6 +73,10 @@ let noteList = "";
 for (i =0; i<27; i++){
     noteList += numberToNote(i) + ", ";
 }
+
+// testcode
+let body = document.querySelector("body")
+let noteListParagraph = document.createElement("p");
 noteListParagraph.textContent = noteList;
 body.appendChild(noteListParagraph);
 
