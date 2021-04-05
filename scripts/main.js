@@ -55,6 +55,29 @@ const fretboard = {
     ]
 };
 
+let body = document.querySelector("body")
+let noteListParagraph = document.createElement("p");
+
+const basicNotes = ["a"];
+for (i=1; i< 12; i++){
+    if(basicNotes[i-1] === "b" || basicNotes[i-1] === "e" || basicNotes[i-1].indexOf("#") !== -1){
+        basicNotes.push(String.fromCharCode((basicNotes[i-1].charCodeAt(0) + 1)));
+    } else {
+        basicNotes.push(basicNotes[i-1] + "#")
+    }
+}
+// take a number, return a note
+function numberToNote(noteNumber){
+    return basicNotes[noteNumber%12];
+}
+
+let noteList = "";
+for (i =0; i<27; i++){
+    noteList += numberToNote(i) + ", ";
+}
+noteListParagraph.textContent = noteList;
+body.appendChild(noteListParagraph);
+
 // creating the board
 const board = document.createElementNS(svgns, 'rect');
 board.setAttribute("x", "0");
@@ -218,7 +241,7 @@ for (i = 0; i < fretboard.strings.length; i++) {
     svg.appendChild(guitarString);
 }
 
-// place red dots
+// place red dots and notenames
 for (i = 0; i < stringPositions.length; i++) {
     for (j = 0; j < fretPositions.length; j++) {
         let noteDot = document.createElementNS(svgns, 'use');
@@ -227,7 +250,19 @@ for (i = 0; i < stringPositions.length; i++) {
         noteDot.setAttribute("id", "note_" + (j + (i * fretPositions.length)));
         noteDot.setAttribute("href", "#redDotAsset");
         noteDot.setAttribute("fill", "red");
-        svg.appendChild(noteDot);        
+        svg.appendChild(noteDot);
+        
+        let noteText = document.createElementNS(svgns, 'text');
+        noteText.setAttribute("fill", "white");
+        noteText.setAttribute("font-size", fretboard.fretWidth*2.5);
+        let textNode = document.createTextNode("a#");
+        noteText.appendChild(textNode);
+
+        svg.appendChild(noteText);
+        let bbox = noteText.getBBox();
+        noteText.setAttribute("x", fretCenters[j] - bbox.width/2);
+        noteText.setAttribute("y", stringPositions[i] + bbox.height/4);
+        
     }
 }
 /**
@@ -240,25 +275,3 @@ const lastFretPosition = fretPositions[fretboard.numOfFrets - 1];
 const lastFretViewBuffer = fretPositions[fretboard.numOfFrets - 1] - fretPositions[fretboard.numOfFrets - 2];
 svg.setAttribute("viewBox", "0" + " 0 " + (lastFretPosition + lastFretViewBuffer) + " " + fretboard.width);
 
-let body = document.querySelector("body")
-let noteListParagraph = document.createElement("p");
-
-const basicNotes = ["a"];
-for (i=1; i< 12; i++){
-    if(basicNotes[i-1] === "b" || basicNotes[i-1] === "e" || basicNotes[i-1].indexOf("#") !== -1){
-        basicNotes.push(String.fromCharCode((basicNotes[i-1].charCodeAt(0) + 1)));
-    } else {
-        basicNotes.push(basicNotes[i-1] + "#")
-    }
-}
-// take a number, return a note
-function numberToNote(noteNumber){
-    return basicNotes[noteNumber%12];
-}
-
-let noteList = "";
-for (i =0; i<27; i++){
-    noteList += numberToNote(i) + ", ";
-}
-noteListParagraph.textContent = noteList;
-body.appendChild(noteListParagraph);
