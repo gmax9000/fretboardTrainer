@@ -56,7 +56,7 @@ const fretboard = {
 };
 
 const basicNotes = ["a"];
-for (i=1; i< 12; i++){
+for (let i=1; i< 12; i++){
     if(basicNotes[i-1] === "b" || basicNotes[i-1] === "e" || basicNotes[i-1].indexOf("#") !== -1){
         basicNotes.push(String.fromCharCode((basicNotes[i-1].charCodeAt(0) + 1)));
     } else {
@@ -70,15 +70,16 @@ function numberToNote(noteNumber){
 }
 
 // create notes on one string
-function notesOnString(startingNoteAsNumber, numberOfFrets){
+function notesOnString(startingNoteObject, numberOfFrets){
+    const startingNoteNumber = basicNotes.indexOf(startingNoteObject.note) + startingNoteObject.octave*12; //missing accidental
     let notesOnString = [];
-    for(i = startingNoteAsNumber; i < startingNoteAsNumber + numberOfFrets; i++){
+    for(let i = startingNoteNumber; i < startingNoteNumber + numberOfFrets + 1; i++){
         notesOnString.push(numberToNote(i));
     }
     return notesOnString;
 }
 
-let noteList = notesOnString(5, 24).toString();
+let noteList = notesOnString({note:"f", accidental: false, octave: 0}, 24).toString();
 
 // testcode
 let body = document.querySelector("body")
@@ -166,7 +167,7 @@ defs.appendChild(stringAsset);
 function calculateFretPositions(guitar) {
     const remainingScaleDivider = 17.871; // it's called the rule of 18
     const fretPositions = [];
-    for (i = 0; i < guitar.numOfFrets; i++) {
+    for (let i = 0; i < guitar.numOfFrets; i++) {
         if (i === 0) {
             fretPositions.push((guitar.scale / remainingScaleDivider) + fretboard.nutWidth);
         } else {
@@ -181,7 +182,7 @@ const fretPositions = calculateFretPositions(fretboard);
 // takes an array of fret positions and returns an array of fret centers
 function calculateFretCenterX(fretPositions) {
     const fretCenters = [];
-    for (i = 0; i < fretPositions.length; i++) {
+    for (let i = 0; i < fretPositions.length; i++) {
         if (i === 0) {
             fretCenters.push((fretPositions[i] + fretboard.nutWidth) / 2);
         } else {
@@ -193,7 +194,7 @@ function calculateFretCenterX(fretPositions) {
 const fretCenters = calculateFretCenterX(fretPositions);
 
 // place frets and dots in svg
-for (i = 0; i < fretboard.numOfFrets; i++) {
+for (let i = 0; i < fretboard.numOfFrets; i++) {
     let fret = document.createElementNS(svgns, 'use');
     fret.setAttribute("x", fretPositions[i]);
     fret.setAttribute("y", "0");
@@ -230,7 +231,7 @@ for (i = 0; i < fretboard.numOfFrets; i++) {
 function calculateStringPositions(guitar) {
     const positions = [guitar.width / 12];
     const stringDistance = (guitar.width - (2 * positions[0])) / (guitar.strings.length - 1); // TODO: check against div by zero
-    for (i = 1; i < guitar.strings.length; i++) {
+    for (let i = 1; i < guitar.strings.length; i++) {
         positions.push(positions[i - 1] + stringDistance);
     };
     return positions;
@@ -238,7 +239,7 @@ function calculateStringPositions(guitar) {
 const stringPositions = calculateStringPositions(fretboard);
 
 // place strings
-for (i = 0; i < fretboard.strings.length; i++) {
+for (let i = 0; i < fretboard.strings.length; i++) {
     let guitarString = document.createElementNS(svgns, 'use');
     guitarString.setAttribute("x", "0");
     guitarString.setAttribute("y", stringPositions[i]);
@@ -249,8 +250,13 @@ for (i = 0; i < fretboard.strings.length; i++) {
     svg.appendChild(guitarString);
 }
 
+let notesOnAllStrings = [];
+for(let i = 0; i < fretboard.strings.length; i++){
+    notesOnAllStrings.push( notesOnString(fretboard.strings[i], fretboard.numOfFrets));
+}
+
 // place red dots and notenames
-for (i = 0; i < stringPositions.length; i++) {
+for (let i = 0; i < stringPositions.length; i++) {
 
     // place nut note
     let nutDot = document.createElementNS(svgns, 'use');
@@ -264,15 +270,15 @@ for (i = 0; i < stringPositions.length; i++) {
         let nutText = document.createElementNS(svgns, 'text');
         nutText.setAttribute("fill", "white");
         nutText.setAttribute("font-size", fretboard.fretWidth*2.5);
-        let textNode = document.createTextNode("a#");
+        let textNode = document.createTextNode(fretboard.strings[i].note);
         nutText.appendChild(textNode);
 
         svg.appendChild(nutText);
         let nutBox = nutText.getBBox();
-        nutText.setAttribute("x", - nutBox.width/8);
+        nutText.setAttribute("x", fretboard.nutWidth/2 - nutBox.width/2);
         nutText.setAttribute("y", stringPositions[i] + nutBox.height/4);
 
-    for (j = 0; j < fretPositions.length; j++) {
+    for (let j = 0; j < fretPositions.length; j++) {
         let noteDot = document.createElementNS(svgns, 'use');
         noteDot.setAttribute("x", fretCenters[j]);
         noteDot.setAttribute("y", stringPositions[i]);
@@ -284,7 +290,7 @@ for (i = 0; i < stringPositions.length; i++) {
         let noteText = document.createElementNS(svgns, 'text');
         noteText.setAttribute("fill", "white");
         noteText.setAttribute("font-size", fretboard.fretWidth*2.5);
-        let textNode = document.createTextNode("a#");
+        let textNode = document.createTextNode(notesOnAllStrings[i][j+1]);
         noteText.appendChild(textNode);
 
         svg.appendChild(noteText);
