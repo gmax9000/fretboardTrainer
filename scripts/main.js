@@ -79,9 +79,9 @@ function notesOnString(startingNoteObject, numberOfFrets){
     return notesOnString;
 }
 
-let noteList = notesOnString({note:"f", accidental: false, octave: 0}, 24).toString();
 
 // testcode
+let noteList = notesOnString({note:"f", accidental: false, octave: 0}, 24).toString();
 let body = document.querySelector("body")
 let noteListParagraph = document.createElement("p");
 noteListParagraph.textContent = noteList;
@@ -89,8 +89,6 @@ body.appendChild(noteListParagraph);
 
 // creating the board
 const board = document.createElementNS(svgns, 'rect');
-board.setAttribute("x", "0");
-board.setAttribute("y", "0");
 board.setAttribute("width", fretboard.scale);
 board.setAttribute("height", fretboard.width);
 board.setAttribute("fill", fretboard.boardColor);
@@ -99,8 +97,6 @@ svg.appendChild(board);
 
 // creating the nut
 const nut = document.createElementNS(svgns, 'rect');
-nut.setAttribute("x", "0");
-nut.setAttribute("y", "0");
 nut.setAttribute("width", fretboard.nutWidth);
 nut.setAttribute("height", fretboard.width);
 nut.setAttribute("fill", "white");
@@ -110,9 +106,6 @@ svg.appendChild(nut);
 // fretAsset definition
 const fretAsset = document.createElementNS(svgns, 'line');
 fretAsset.setAttribute("id", "fretAsset");
-fretAsset.setAttribute("x1", "0");
-fretAsset.setAttribute("y1", "0");
-fretAsset.setAttribute("x2", "0");
 fretAsset.setAttribute("y2", fretboard.width);
 fretAsset.setAttribute("stroke", fretboard.fretColor);
 fretAsset.setAttribute("stroke-width", fretboard.fretWidth);
@@ -121,8 +114,6 @@ defs.appendChild(fretAsset);
 // whiteDotAsset definition
 const whiteDotAsset = document.createElementNS(svgns, 'circle');
 whiteDotAsset.setAttribute("id", "whiteDotAsset");
-whiteDotAsset.setAttribute("cx", "0");
-whiteDotAsset.setAttribute("cy", "0");
 whiteDotAsset.setAttribute("fill", "white");
 whiteDotAsset.setAttribute("r", fretboard.fretWidth);
 defs.appendChild(whiteDotAsset);
@@ -130,8 +121,6 @@ defs.appendChild(whiteDotAsset);
 // redDotAsset definition
 const redDotAsset = document.createElementNS(svgns, 'circle');
 redDotAsset.setAttribute("id", "redDotAsset");
-redDotAsset.setAttribute("cx", "0");
-redDotAsset.setAttribute("cy", "0");
 redDotAsset.setAttribute("fill", "red");
 redDotAsset.setAttribute("r", 1.5 * fretboard.fretWidth);
 defs.appendChild(redDotAsset);
@@ -141,13 +130,11 @@ const doubleDotAsset = document.createElementNS(svgns, 'g');
 doubleDotAsset.setAttribute("id", "doubleDotAsset");
 // first dot
 let oneDot = document.createElementNS(svgns, 'use');
-oneDot.setAttribute("x", "0");
 oneDot.setAttribute("y", fretboard.width / 3);
 oneDot.setAttribute("href", "#whiteDotAsset");
 doubleDotAsset.appendChild(oneDot);
 // second dot
 oneDot = document.createElementNS(svgns, 'use');
-oneDot.setAttribute("x", "0");
 oneDot.setAttribute("y", fretboard.width * 2 / 3);
 oneDot.setAttribute("href", "#whiteDotAsset");
 doubleDotAsset.appendChild(oneDot);
@@ -156,10 +143,7 @@ defs.appendChild(doubleDotAsset);
 // stringAsset definition
 const stringAsset = document.createElementNS(svgns, 'line');
 stringAsset.setAttribute("id", "stringAsset");
-stringAsset.setAttribute("x1", "0");
-stringAsset.setAttribute("y1", "0");
 stringAsset.setAttribute("x2", fretboard.scale);
-stringAsset.setAttribute("y2", "0");
 stringAsset.setAttribute("stroke", fretboard.stringColor);
 defs.appendChild(stringAsset);
 
