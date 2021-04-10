@@ -66,24 +66,24 @@ const [numberToNote, notesOnString] = (function () {
         }
     }
 
-    return [
-        // take number, return note
-        function (noteNumber) {
-            return basicNotes[noteNumber % 12];
-        },
+    function numberToNote(noteNumber) {
+        return basicNotes[noteNumber % 12];
+    }
 
-        // create notes on one string
-        function (startingNoteObject, numberOfFrets) {
-            const startingNoteNumber = basicNotes.indexOf(startingNoteObject.note) + startingNoteObject.octave * 12; //missing accidental
-            let notesOnString = [];
-            for (let i = startingNoteNumber; i < startingNoteNumber + numberOfFrets + 1; i++) {
-                notesOnString.push(numberToNote(i));
-            }
-            return notesOnString;
+    function notesOnString(startingNoteObject, numberOfFrets) {
+        const startingNoteNumber = basicNotes.indexOf(startingNoteObject.note) + startingNoteObject.octave * 12; //missing accidental
+        let notesOnString = [];
+        for (let i = startingNoteNumber; i < startingNoteNumber + numberOfFrets + 1; i++) {
+            notesOnString.push(numberToNote(i));
         }
+        return notesOnString;
+    }
+
+    return [
+        numberToNote,
+        notesOnString
     ]
 })();
-
 
 // creating the board
 const board = document.createElementNS(svgns, 'rect');
@@ -161,7 +161,11 @@ function calculateFretPositions(guitar) {
 
 const fretPositions = calculateFretPositions(fretboard);
 
-// takes an array of fret positions and returns an array of fret centers
+/**
+ * 
+ * @param {number[]} fretPositions 
+ * @returns the positions of all fret centers
+ */
 function calculateFretCenterX(fretPositions) {
     const fretCenters = [];
     for (let i = 0; i < fretPositions.length; i++) {
@@ -237,51 +241,58 @@ for (let i = 0; i < fretboard.strings.length; i++) {
     notesOnAllStrings.push(notesOnString(fretboard.strings[i], fretboard.numOfFrets));
 }
 
-// place red dots and notenames
-for (let i = 0; i < stringPositions.length; i++) {
+function showAllNotes() {
+    const noteGroup = document.createElementNS(svgns, 'g');
+    noteGroup.setAttribute("id", "noteIcons")
+    svg.appendChild(noteGroup);
+    for (let i = 0; i < stringPositions.length; i++) {
+        // create group for all notes
 
-    // place nut note
-    let nutDot = document.createElementNS(svgns, 'use');
-    nutDot.setAttribute("x", fretboard.nutWidth / 2);
-    nutDot.setAttribute("y", stringPositions[i]);
-    nutDot.setAttribute("id", "note_nut");
-    nutDot.setAttribute("href", "#redDotAsset");
-    nutDot.setAttribute("fill", "red");
-    svg.appendChild(nutDot);
+        // place nut note
+        let nutDot = document.createElementNS(svgns, 'use');
+        nutDot.setAttribute("x", fretboard.nutWidth / 2);
+        nutDot.setAttribute("y", stringPositions[i]);
+        nutDot.setAttribute("id", "note_nut");
+        nutDot.setAttribute("href", "#redDotAsset");
+        nutDot.setAttribute("fill", "red");
+        noteGroup.appendChild(nutDot);
 
-    let nutText = document.createElementNS(svgns, 'text');
-    nutText.setAttribute("fill", "white");
-    nutText.setAttribute("font-size", fretboard.fretWidth * 2.5);
-    let textNode = document.createTextNode(fretboard.strings[i].note);
-    nutText.appendChild(textNode);
+        let nutText = document.createElementNS(svgns, 'text');
+        nutText.setAttribute("fill", "white");
+        nutText.setAttribute("font-size", fretboard.fretWidth * 2.5);
+        let textNode = document.createTextNode(fretboard.strings[i].note);
+        nutText.appendChild(textNode);
 
-    svg.appendChild(nutText);
-    let nutBox = nutText.getBBox();
-    nutText.setAttribute("x", fretboard.nutWidth / 2 - nutBox.width / 2);
-    nutText.setAttribute("y", stringPositions[i] + nutBox.height / 4);
+        noteGroup.appendChild(nutText);
+        let nutBox = nutText.getBBox();
+        nutText.setAttribute("x", fretboard.nutWidth / 2 - nutBox.width / 2);
+        nutText.setAttribute("y", stringPositions[i] + nutBox.height / 4);
 
-    for (let j = 0; j < fretPositions.length; j++) {
-        let noteDot = document.createElementNS(svgns, 'use');
-        noteDot.setAttribute("x", fretCenters[j]);
-        noteDot.setAttribute("y", stringPositions[i]);
-        noteDot.setAttribute("id", "note_" + (j + (i * fretPositions.length)));
-        noteDot.setAttribute("href", "#redDotAsset");
-        noteDot.setAttribute("fill", "red");
-        svg.appendChild(noteDot);
+        for (let j = 0; j < fretPositions.length; j++) {
+            let noteDot = document.createElementNS(svgns, 'use');
+            noteDot.setAttribute("x", fretCenters[j]);
+            noteDot.setAttribute("y", stringPositions[i]);
+            noteDot.setAttribute("id", "note_" + (j + (i * fretPositions.length)));
+            noteDot.setAttribute("href", "#redDotAsset");
+            noteDot.setAttribute("fill", "red");
+            noteGroup.appendChild(noteDot);
 
-        let noteText = document.createElementNS(svgns, 'text');
-        noteText.setAttribute("fill", "white");
-        noteText.setAttribute("font-size", fretboard.fretWidth * 2.5);
-        let textNode = document.createTextNode(notesOnAllStrings[i][j + 1]);
-        noteText.appendChild(textNode);
+            let noteText = document.createElementNS(svgns, 'text');
+            noteText.setAttribute("fill", "white");
+            noteText.setAttribute("font-size", fretboard.fretWidth * 2.5);
+            let textNode = document.createTextNode(notesOnAllStrings[i][j + 1]);
+            noteText.appendChild(textNode);
 
-        svg.appendChild(noteText);
-        let bbox = noteText.getBBox();
-        noteText.setAttribute("x", fretCenters[j] - bbox.width / 2);
-        noteText.setAttribute("y", stringPositions[i] + bbox.height / 4);
+            noteGroup.appendChild(noteText);
+            let bbox = noteText.getBBox();
+            noteText.setAttribute("x", fretCenters[j] - bbox.width / 2);
+            noteText.setAttribute("y", stringPositions[i] + bbox.height / 4);
 
+        }
     }
-}
+};
+
+showAllNotes();
 /**
  * place viewbox
  * 
@@ -300,7 +311,19 @@ function activateButton() {
     buttons.forEach(element => element.setAttribute("class", (element === this) ? "activeButton" : "inactiveButton"));
 }
 
+function removeNoteIcons() {
+    let iconGroup = document.querySelector("#noteIcons");
+    if (iconGroup) {
+        iconGroup.parentElement.removeChild(iconGroup);
+    }
+}
+
 const buttons = document.querySelectorAll("button");
 buttons.forEach(element => element.addEventListener("click", activateButton));
+buttons.forEach(element => element.addEventListener("click", removeNoteIcons));
 
 const displayNoteButton = document.querySelector("#notesButton");
+const readingPracticeButton = document.querySelector("#readingPracticeButton");
+const locationPracticeButton = document.querySelector("#locationPracticeButton");
+
+displayNoteButton.addEventListener("click", showAllNotes);
