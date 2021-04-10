@@ -55,29 +55,35 @@ const fretboard = {
     ]
 };
 
-const basicNotes = ["a"];
-for (let i=1; i< 12; i++){
-    if(basicNotes[i-1] === "b" || basicNotes[i-1] === "e" || basicNotes[i-1].indexOf("#") !== -1){
-        basicNotes.push(String.fromCharCode((basicNotes[i-1].charCodeAt(0) + 1)));
-    } else {
-        basicNotes.push(basicNotes[i-1] + "#")
-    }
-}
+const [numberToNote, notesOnString] = (function () {
 
-// take a number, return a note
-function numberToNote(noteNumber){
-    return basicNotes[noteNumber%12];
-}
-
-// create notes on one string
-function notesOnString(startingNoteObject, numberOfFrets){
-    const startingNoteNumber = basicNotes.indexOf(startingNoteObject.note) + startingNoteObject.octave*12; //missing accidental
-    let notesOnString = [];
-    for(let i = startingNoteNumber; i < startingNoteNumber + numberOfFrets + 1; i++){
-        notesOnString.push(numberToNote(i));
+    const basicNotes = ["a"];
+    for (let i = 1; i < 12; i++) {
+        if (basicNotes[i - 1] === "b" || basicNotes[i - 1] === "e" || basicNotes[i - 1].indexOf("#") !== -1) {
+            basicNotes.push(String.fromCharCode((basicNotes[i - 1].charCodeAt(0) + 1)));
+        } else {
+            basicNotes.push(basicNotes[i - 1] + "#")
+        }
     }
-    return notesOnString;
-}
+
+    return [
+        // take number, return note
+        function (noteNumber) {
+            return basicNotes[noteNumber % 12];
+        },
+
+        // create notes on one string
+        function (startingNoteObject, numberOfFrets) {
+            const startingNoteNumber = basicNotes.indexOf(startingNoteObject.note) + startingNoteObject.octave * 12; //missing accidental
+            let notesOnString = [];
+            for (let i = startingNoteNumber; i < startingNoteNumber + numberOfFrets + 1; i++) {
+                notesOnString.push(numberToNote(i));
+            }
+            return notesOnString;
+        }
+    ]
+})();
+
 
 // creating the board
 const board = document.createElementNS(svgns, 'rect');
@@ -220,15 +226,15 @@ for (let i = 0; i < fretboard.strings.length; i++) {
     guitarString.setAttribute("x", "0");
     guitarString.setAttribute("y", stringPositions[i]);
     guitarString.setAttribute("href", "#stringAsset")
-    guitarString.setAttribute("stroke-width", i*(fretboard.fretWidth / 10) + (fretboard.fretWidth * 2 / 3));
+    guitarString.setAttribute("stroke-width", i * (fretboard.fretWidth / 10) + (fretboard.fretWidth * 2 / 3));
     guitarString.setAttribute("id", "string" + i);  //can't override def attributes, do I need it?
 
     svg.appendChild(guitarString);
 }
 
 let notesOnAllStrings = [];
-for(let i = 0; i < fretboard.strings.length; i++){
-    notesOnAllStrings.push( notesOnString(fretboard.strings[i], fretboard.numOfFrets));
+for (let i = 0; i < fretboard.strings.length; i++) {
+    notesOnAllStrings.push(notesOnString(fretboard.strings[i], fretboard.numOfFrets));
 }
 
 // place red dots and notenames
@@ -236,23 +242,23 @@ for (let i = 0; i < stringPositions.length; i++) {
 
     // place nut note
     let nutDot = document.createElementNS(svgns, 'use');
-        nutDot.setAttribute("x", fretboard.nutWidth/2);
-        nutDot.setAttribute("y", stringPositions[i]);
-        nutDot.setAttribute("id", "note_nut");
-        nutDot.setAttribute("href", "#redDotAsset");
-        nutDot.setAttribute("fill", "red");
-        svg.appendChild(nutDot);
-        
-        let nutText = document.createElementNS(svgns, 'text');
-        nutText.setAttribute("fill", "white");
-        nutText.setAttribute("font-size", fretboard.fretWidth*2.5);
-        let textNode = document.createTextNode(fretboard.strings[i].note);
-        nutText.appendChild(textNode);
+    nutDot.setAttribute("x", fretboard.nutWidth / 2);
+    nutDot.setAttribute("y", stringPositions[i]);
+    nutDot.setAttribute("id", "note_nut");
+    nutDot.setAttribute("href", "#redDotAsset");
+    nutDot.setAttribute("fill", "red");
+    svg.appendChild(nutDot);
 
-        svg.appendChild(nutText);
-        let nutBox = nutText.getBBox();
-        nutText.setAttribute("x", fretboard.nutWidth/2 - nutBox.width/2);
-        nutText.setAttribute("y", stringPositions[i] + nutBox.height/4);
+    let nutText = document.createElementNS(svgns, 'text');
+    nutText.setAttribute("fill", "white");
+    nutText.setAttribute("font-size", fretboard.fretWidth * 2.5);
+    let textNode = document.createTextNode(fretboard.strings[i].note);
+    nutText.appendChild(textNode);
+
+    svg.appendChild(nutText);
+    let nutBox = nutText.getBBox();
+    nutText.setAttribute("x", fretboard.nutWidth / 2 - nutBox.width / 2);
+    nutText.setAttribute("y", stringPositions[i] + nutBox.height / 4);
 
     for (let j = 0; j < fretPositions.length; j++) {
         let noteDot = document.createElementNS(svgns, 'use');
@@ -262,18 +268,18 @@ for (let i = 0; i < stringPositions.length; i++) {
         noteDot.setAttribute("href", "#redDotAsset");
         noteDot.setAttribute("fill", "red");
         svg.appendChild(noteDot);
-        
+
         let noteText = document.createElementNS(svgns, 'text');
         noteText.setAttribute("fill", "white");
-        noteText.setAttribute("font-size", fretboard.fretWidth*2.5);
-        let textNode = document.createTextNode(notesOnAllStrings[i][j+1]);
+        noteText.setAttribute("font-size", fretboard.fretWidth * 2.5);
+        let textNode = document.createTextNode(notesOnAllStrings[i][j + 1]);
         noteText.appendChild(textNode);
 
         svg.appendChild(noteText);
         let bbox = noteText.getBBox();
-        noteText.setAttribute("x", fretCenters[j] - bbox.width/2);
-        noteText.setAttribute("y", stringPositions[i] + bbox.height/4);
-        
+        noteText.setAttribute("x", fretCenters[j] - bbox.width / 2);
+        noteText.setAttribute("y", stringPositions[i] + bbox.height / 4);
+
     }
 }
 /**
@@ -290,8 +296,8 @@ svg.setAttribute("viewBox", "-5" + " 0 " + (lastFretPosition + lastFretViewBuffe
  * actual page logic starts here
  */
 
-function activateButton(){
-         buttons.forEach(element => element.setAttribute("class", (element === this) ? "activeButton": "inactiveButton"));
+function activateButton() {
+    buttons.forEach(element => element.setAttribute("class", (element === this) ? "activeButton" : "inactiveButton"));
 }
 
 const buttons = document.querySelectorAll("button");
