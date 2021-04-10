@@ -79,14 +79,6 @@ function notesOnString(startingNoteObject, numberOfFrets){
     return notesOnString;
 }
 
-
-// testcode
-let noteList = notesOnString({note:"f", accidental: false, octave: 0}, 24).toString();
-let body = document.querySelector("body")
-let noteListParagraph = document.createElement("p");
-noteListParagraph.textContent = noteList;
-body.appendChild(noteListParagraph);
-
 // creating the board
 const board = document.createElementNS(svgns, 'rect');
 board.setAttribute("width", fretboard.scale);
@@ -294,3 +286,15 @@ const lastFretPosition = fretPositions[fretboard.numOfFrets - 1];
 const lastFretViewBuffer = fretPositions[fretboard.numOfFrets - 1] - fretPositions[fretboard.numOfFrets - 2];
 svg.setAttribute("viewBox", "-5" + " 0 " + (lastFretPosition + lastFretViewBuffer) + " " + fretboard.width);
 
+/**
+ * actual page logic starts here
+ */
+
+function activateButton(){
+         buttons.forEach(element => element.setAttribute("class", (element === this) ? "activeButton": "inactiveButton"));
+}
+
+const buttons = document.querySelectorAll("button");
+buttons.forEach(element => element.addEventListener("click", activateButton));
+
+const displayNoteButton = document.querySelector("#notesButton");

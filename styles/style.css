@@ -8,10 +8,22 @@ h1 {
     font-size: 60px;
     text-align: center;
 }
-  
+ 
+ul {
+    display: flex;
+    list-style-type: none;
+}
 p, li {
     line-height: 2;
     letter-spacing: 1px;
+}
+
+.activeButton {
+    background-color: rgb(0, 184, 0);
+}
+
+.inactiveButton {
+    background-color: dimgray;
 }
 
 body {
