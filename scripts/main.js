@@ -180,6 +180,10 @@ function calculateFretCenterX(fretPositions) {
 const fretCenters = calculateFretCenterX(fretPositions);
 
 // place frets and dots in svg
+const fretGroup = document.createElementNS(svgns, "g");
+fretGroup.setAttribute("id", "fretsAndInlays");
+svg.appendChild(fretGroup)
+
 for (let i = 0; i < fretboard.numOfFrets; i++) {
     let fret = document.createElementNS(svgns, 'use');
     fret.setAttribute("x", fretPositions[i]);
@@ -187,7 +191,7 @@ for (let i = 0; i < fretboard.numOfFrets; i++) {
     fret.setAttribute("href", "#fretAsset");
     fret.setAttribute("id", "fret" + (i + 1)); //can't override def attributes, do I need it?
 
-    svg.appendChild(fret);
+    fretGroup.appendChild(fret);
 
     // place single dots at 3 5 7 9 repeat from 12th
     if (fretboard.singleDotPos.indexOf((i + 1) % 12) !== -1) {
@@ -197,7 +201,7 @@ for (let i = 0; i < fretboard.numOfFrets; i++) {
         dot.setAttribute("href", "#whiteDotAsset");
         dot.setAttribute("id", "dotAtFret_" + (i + 1)); //can't override def attributes, do I need it?
 
-        svg.appendChild(dot)
+        fretGroup.appendChild(dot)
     }
 
     // place double dots at every 12th fret
@@ -208,7 +212,7 @@ for (let i = 0; i < fretboard.numOfFrets; i++) {
         dot.setAttribute("href", "#doubleDotAsset");
         dot.setAttribute("id", "dotsAtFret_" + (i + 1)); //can't override def attributes, do I need it?
 
-        svg.appendChild(dot)
+        fretGroup.appendChild(dot)
     }
 }
 
@@ -225,6 +229,10 @@ function calculateStringPositions(guitar) {
 const stringPositions = calculateStringPositions(fretboard);
 
 // place strings
+const stringGroup = document.createElementNS(svgns, "g");
+stringGroup.id = "stringGroup";
+svg.appendChild(stringGroup);
+
 for (let i = 0; i < fretboard.strings.length; i++) {
     let guitarString = document.createElementNS(svgns, 'use');
     guitarString.setAttribute("x", "0");
@@ -233,7 +241,7 @@ for (let i = 0; i < fretboard.strings.length; i++) {
     guitarString.setAttribute("stroke-width", i * (fretboard.fretWidth / 10) + (fretboard.fretWidth * 2 / 3));
     guitarString.setAttribute("id", "string" + i);  //can't override def attributes, do I need it?
 
-    svg.appendChild(guitarString);
+    stringGroup.appendChild(guitarString);
 }
 
 let notesOnAllStrings = [];
@@ -335,3 +343,11 @@ for (let i = 0; i < 12; i++) {
     newButton.textContent = numberToNote(i);
     answerButtonsDiv.appendChild(newButton);
 }
+
+function randomNote(){
+    return {
+        stringNumber: 5,
+        fret: 7
+    };
+}
+
