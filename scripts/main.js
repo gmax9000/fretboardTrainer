@@ -327,3 +327,11 @@ const readingPracticeButton = document.querySelector("#readingPracticeButton");
 const locationPracticeButton = document.querySelector("#locationPracticeButton");
 
 displayNoteButton.addEventListener("click", showAllNotes);
+
+const answerButtonsDiv = document.querySelector("#answerButtons");
+for (let i = 0; i < 12; i++) {
+    let newButton = document.createElement("button");
+    newButton.id = numberToNote(i) + "_button";
+    newButton.textContent = numberToNote(i);
+    answerButtonsDiv.appendChild(newButton);
+}
