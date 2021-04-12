@@ -298,6 +298,14 @@ const locationPracticeButton = document.querySelector("#locationPracticeButton")
 
 displayNoteButton.addEventListener("click", showAllNotes);
 
+function displayQuestionMark(){
+    const iconGroup = document.createElementNS(svgns, "g");
+    iconGroup.id = "noteIcons";
+    svg.appendChild(iconGroup);
+    displaySingleNote(1, 2, iconGroup, true);
+}
+readingPracticeButton.addEventListener("click", displayQuestionMark)
+
 const answerButtonsDiv = document.querySelector("#answerButtons");
 for (let i = 0; i < 12; i++) {
     let newButton = document.createElement("button");
