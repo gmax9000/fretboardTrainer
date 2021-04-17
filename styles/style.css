@@ -18,11 +18,11 @@ p, li {
     letter-spacing: 1px;
 }
 
-.activeButton {
+ul .activeButton {
     background-color: rgb(0, 184, 0);
 }
 
-.inactiveButton {
+ul .inactiveButton {
     background-color: dimgray;
 }
 
