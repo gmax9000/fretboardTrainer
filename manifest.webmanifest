@@ -1,0 +1,13 @@
+{
+    "short_name": "FT",
+    "name": "Fretboard Trainer",
+    "description": "An app to teach you the notes on the fretboard",
+    "start_url": "/index.html",
+    "background_color": "black",
+    "display": "standalone",
+    "icons": [{
+        "src": "images/icon.png",
+        "size": "96x96",
+        "type": "image/png"
+    }]
+}
