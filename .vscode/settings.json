@@ -1,0 +1,8 @@
+{
+    "liveServer.settings.https": {
+        "enable": true, //set it true to enable the feature.
+        "cert": "D:\\pastime\\softwareDevelopment\\webDev\\fretBoardTrainer\\server.crt", //full path of the certificate
+        "key": "D:\\pastime\\softwareDevelopment\\webDev\\fretBoardTrainer\\server.key", //full path of the private key
+        "passphrase": "12345"
+    }
+}
