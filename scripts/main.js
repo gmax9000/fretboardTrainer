@@ -288,24 +288,6 @@ function removeNoteIcons() {
     }
 }
 
-const buttons = document.querySelectorAll("button");
-buttons.forEach(element => element.addEventListener("click", activateButton));
-buttons.forEach(element => element.addEventListener("click", removeNoteIcons));
-
-const displayNoteButton = document.querySelector("#notesButton");
-const readingPracticeButton = document.querySelector("#readingPracticeButton");
-const locationPracticeButton = document.querySelector("#locationPracticeButton");
-
-displayNoteButton.addEventListener("click", showAllNotes);
-
-function displayQuestionMark(){
-    const iconGroup = document.createElementNS(svgns, "g");
-    iconGroup.id = "noteIcons";
-    svg.appendChild(iconGroup);
-    displaySingleNote(1, 2, iconGroup, true);
-}
-readingPracticeButton.addEventListener("click", displayQuestionMark)
-
 const answerButtonsDiv = document.querySelector("#answerButtons");
 for (let i = 0; i < 12; i++) {
     let newButton = document.createElement("button");
@@ -314,10 +296,34 @@ for (let i = 0; i < 12; i++) {
     answerButtonsDiv.appendChild(newButton);
 }
 
+answerButtonsDiv.addEventListener("click", displayQuestionMark);
+
+const modeButtons = document.querySelectorAll("ul button");
+modeButtons.forEach(element => element.addEventListener("click", activateButton));
+modeButtons.forEach(element => element.addEventListener("click", removeNoteIcons));
+
+const displayNoteButton = document.querySelector("#notesButton");
+const readingPracticeButton = document.querySelector("#readingPracticeButton");
+const locationPracticeButton = document.querySelector("#locationPracticeButton");
+
+displayNoteButton.addEventListener("click", showAllNotes);
+
+function displayQuestionMark(){
+    currentRandomNote = randomNote();
+    const iconGroup = document.createElementNS(svgns, "g");
+    iconGroup.id = "noteIcons";
+    svg.appendChild(iconGroup);
+    displaySingleNote(currentRandomNote.stringNumber, currentRandomNote.fret, iconGroup, true);
+}
+readingPracticeButton.addEventListener("click", displayQuestionMark)
+
+
 function randomNote() {
+    let a = Math.round((fretboard.strings.length - 1) * Math.random());
+    let b = Math.round(fretboard.numOfFrets * Math.random());
     return {
-        stringNumber: 5,
-        fret: 7
+        stringNumber: a,
+        fret: b
     };
 }
 
@@ -341,4 +347,9 @@ function displaySingleNote(string, fret, parent, questionmark) {
     let bbox = noteText.getBBox();
     noteText.setAttribute("x", fretCenters[fret] - bbox.width / 2);
     noteText.setAttribute("y", stringPositions[string] + bbox.height / 4);
+}
+
+console.log("registering service worker");
+if('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/scripts/sw.js');
 }

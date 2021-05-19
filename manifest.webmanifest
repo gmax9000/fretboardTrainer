@@ -5,9 +5,16 @@
     "start_url": "/index.html",
     "background_color": "black",
     "display": "standalone",
-    "icons": [{
-        "src": "images/icon.png",
-        "size": "96x96",
-        "type": "image/png"
-    }]
+    "icons": [
+        {
+            "src": "images/icon.png",
+            "sizes": "96x96",
+            "type": "image/png"
+        },
+        {
+            "src": "images/icon_144.png",
+            "sizes": "144x144",
+            "type": "image/png" 
+        }
+]
 }
