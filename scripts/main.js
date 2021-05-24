@@ -351,5 +351,5 @@ function displaySingleNote(string, fret, parent, questionmark) {
 
 console.log("registering service worker");
 if('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/scripts/sw.js');
+    navigator.serviceWorker.register('/sw.js');
 }
