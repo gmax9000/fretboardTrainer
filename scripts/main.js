@@ -349,7 +349,9 @@ function displaySingleNote(string, fret, parent, questionmark) {
     noteText.setAttribute("y", stringPositions[string] + bbox.height / 4);
 }
 
+/*
 console.log("registering service worker");
 if('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js');
 }
+*/
