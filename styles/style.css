@@ -1,11 +1,42 @@
-html {
-    font-size: 20px;
+* {
+    margin: 0;
+    padding: 0;
+}
+
+h1, p {
+    margin: 0.5rem 1rem;
+}
+
+body {
     font-family: 'Open Sans', sans-serif;
-    background-color: #cbd1d6;
+    background-color: #242424;
+    color: gainsboro;
+    overflow-x: hidden;
+}
+
+@media screen and (max-width: 400px) {
+    header, p {
+        display: none;
+    }
+
+    html, body, section {
+        height: 100%;
+    }
+
+    ul, li {
+        height: 20%;
+    }
+
+    svg {
+        overflow-x: auto;
+    }
+    svg, #answerButtons {
+        height: 40%;
+    }
 }
 
 h1 {
-    font-size: 60px;
+    font-size: 2em;
     text-align: center;
 }
  
@@ -19,22 +50,17 @@ p, li {
 }
 
 ul .activeButton {
-    background-color: rgb(0, 184, 0);
+    background-color: rgb(163, 235, 115);
 }
 
 ul .inactiveButton {
     background-color: dimgray;
 }
 
-body {
-    width: 1500px;
-    margin: 0 auto;
-    padding: 0 20px 20px 20px;
-}
-
 #answerButtons {
-    margin: auto;
+    margin: 0 auto;
     display: grid;
-    width: 200px;
+    width: 100%;
+    max-width: 400px;
     grid-template-columns: 1fr 1fr 1fr;
 }

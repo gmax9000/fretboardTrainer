@@ -17,16 +17,19 @@
     <title>Fretboard Trainer</title>
 </head>
 <body>
-    <h1>Fretboard Trainer</h1>
-
-    <p>This app is intended to teach you the notes of the fretboard.</p>
-    <p>Your choices are:</p>
-    <ul>
-        <li><button class="activeButton" id="notesButton">Display notes on the fretboard</button></li>
-        <li><button class="inactiveButton" id="readingPracticeButton">Practice reading the fretboard</button></li>
-        <li><button class="inactiveButton" id="locationPracticeButton">Practice finding notes on the fretboard</button></li>
-    </ul>
-    <svg></svg>
-    <div id="answerButtons"></div>
+    <header>
+        <h1>Fretboard Trainer</h1>
+        <p>This app is intended to teach you the notes of the fretboard.</p>
+    </header>
+    <section class="application">
+        <svg id="board"></svg>
+        <p>Your choices are:</p>
+        <ul>
+            <li><button class="activeButton" id="notesButton">Display notes</button></li>
+            <li><button class="inactiveButton" id="readingPracticeButton">Practice reading </button></li>
+            <li><button class="inactiveButton" id="locationPracticeButton">Practice finding </button></li>
+        </ul>
+        <div id="answerButtons"></div>
+    </section>
 </body>
 </html>
