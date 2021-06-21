@@ -278,7 +278,7 @@ svg.setAttribute("viewBox", "-5" + " 0 " + (lastFretPosition + lastFretViewBuffe
  */
 
 function activateButton() {
-    buttons.forEach(element => element.setAttribute("class", (element === this) ? "activeButton" : "inactiveButton"));
+    modeButtons.forEach(element => element.setAttribute("class", (element === this) ? "activeButton" : "inactiveButton"));
 }
 
 function removeNoteIcons() {
