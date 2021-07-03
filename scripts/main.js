@@ -296,6 +296,7 @@ for (let i = 0; i < 12; i++) {
     answerButtonsDiv.appendChild(newButton);
 }
 
+answerButtonsDiv.addEventListener("click", removeNoteIcons);
 answerButtonsDiv.addEventListener("click", displayQuestionMark);
 
 const modeButtons = document.querySelectorAll("ul button");
