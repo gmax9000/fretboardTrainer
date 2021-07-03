@@ -27,11 +27,15 @@ body {
         height: 20%;
     }
 
-    svg {
+    #fboard {
         overflow-x: auto;
     }
-    svg, #answerButtons {
+    #fboard, #answerButtons {
         height: 40%;
+    }
+
+    svg {
+        height: 100%;
     }
 }
 
