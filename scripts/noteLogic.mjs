@@ -10,6 +10,9 @@ const [numberToNote, notesOnString] = (function () {
     }
 
     function numberToNote(noteNumber) {
+        if (noteNumber < 0){
+            throw "Specified noteNumber is not positive!";
+        }
         return basicNotes[noteNumber % 12];
     }
 
