@@ -303,6 +303,21 @@ const modeButtons = document.querySelectorAll("ul button");
 modeButtons.forEach(element => element.addEventListener("click", activateButton));
 modeButtons.forEach(element => element.addEventListener("click", removeNoteIcons));
 
+const answerButtons = document.querySelectorAll("div button");
+
+function compareToSolution(noteString){
+    const currentNote = notesOnAllStrings[currentRandomNote.stringNumber][currentRandomNote.fret];
+    if(noteString === currentNote){
+        return "correct";
+    }else{
+        return "incorrect";
+    }
+}
+function checkAnswer() {
+    answerButtons.forEach(element => element.setAttribute("class", (element === this) ? compareToSolution(this.textContent) : "notSelected"))
+}
+answerButtons.forEach(element => element.addEventListener("click", checkAnswer));
+
 const displayNoteButton = document.querySelector("#notesButton");
 const readingPracticeButton = document.querySelector("#readingPracticeButton");
 const locationPracticeButton = document.querySelector("#locationPracticeButton");

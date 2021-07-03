@@ -64,3 +64,11 @@ ul .inactiveButton {
     max-width: 400px;
     grid-template-columns: 1fr 1fr 1fr;
 }
+
+.correct {
+    background-color: forestgreen;
+}
+
+.incorrect {
+    background-color: red;
+}
