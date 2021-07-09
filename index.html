@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,21 +10,34 @@
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
 
     <script src="scripts/main.js" defer></script>
     <link rel="manifest" href="manifest.webmanifest">
 
     <title>Fretboard Trainer</title>
 </head>
+
 <body>
     <header>
         <h1>Fretboard Trainer</h1>
         <p>This app is intended to teach you the notes of the fretboard.</p>
     </header>
     <section class="application">
-        <div id="fboard">
-            <svg id="board"></svg>
+        <div class="sideBySide">
+            <div id="stringtogglers">
+                <ul>
+                    <li><button class="activeButton" value="1"></button></li>
+                    <li><button class="activeButton" value="2"></button></li>
+                    <li><button class="activeButton" value="3"></button></li>
+                    <li><button class="activeButton" value="4"></button></li>
+                    <li><button class="activeButton" value="5"></button></li>
+                    <li><button class="activeButton" value="6"></button></li>
+                </ul>
+            </div>
+            <div id="fboard">
+                <svg id="board"></svg>
+            </div>
         </div>
         <p>Your choices are:</p>
         <ul>
@@ -34,4 +48,5 @@
         <div id="answerButtons"></div>
     </section>
 </body>
+
 </html>

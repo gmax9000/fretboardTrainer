@@ -330,6 +330,7 @@ function displayQuestionMark(){
     iconGroup.id = "noteIcons";
     svg.appendChild(iconGroup);
     displaySingleNote(currentRandomNote.stringNumber, currentRandomNote.fret, iconGroup, true);
+    scrollToRandomNote(currentRandomNote);
 }
 readingPracticeButton.addEventListener("click", displayQuestionMark)
 
@@ -365,6 +366,15 @@ function displaySingleNote(string, fret, parent, questionmark) {
     noteText.setAttribute("y", stringPositions[string] + bbox.height / 4);
 }
 
+function scrollToRandomNote(currentRandomNote){
+    let fboard = document.querySelector("#fboard");
+    fboard.scrollTo({
+        top: 0,
+        left: (fretCenters[currentRandomNote.fret] * fboard.scrollWidth / gitScale),
+        behavior: "smooth"
+    })
+    console.log("Fret:\t", currentRandomNote.fret , "xcoordinate:\t", fretCenters[currentRandomNote.fret] * fboard.scrollWidth / gitScale, "fretboard width:\t", fboard.scrollWidth);
+}
 /*
 console.log("registering service worker");
 if('serviceWorker' in navigator) {

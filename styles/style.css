@@ -28,9 +28,10 @@ body {
     }
 
     #fboard {
+        height: 100%;
         overflow-x: auto;
     }
-    #fboard, #answerButtons {
+    .sideBySide, #answerButtons {
         height: 40%;
     }
 
@@ -44,15 +45,25 @@ h1 {
     text-align: center;
 }
  
-ul {
+ul, .sideBySide {
     display: flex;
     list-style-type: none;
 }
+
 p, li {
     line-height: 2;
     letter-spacing: 1px;
 }
 
+#stringtogglers>ul{
+    display: list-item;
+    height: 80%;
+}
+
+#stringtogglers>ul>li>button {
+    height: 100%;
+    width: 2em;
+}
 ul .activeButton {
     background-color: rgb(163, 235, 115);
 }
