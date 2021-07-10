@@ -299,11 +299,11 @@ for (let i = 0; i < 12; i++) {
 answerButtonsDiv.addEventListener("click", removeNoteIcons);
 answerButtonsDiv.addEventListener("click", displayQuestionMark);
 
-const modeButtons = document.querySelectorAll("ul button");
+const modeButtons = document.querySelectorAll("ul#modeButtons button");
 modeButtons.forEach(element => element.addEventListener("click", activateButton));
 modeButtons.forEach(element => element.addEventListener("click", removeNoteIcons));
 
-const answerButtons = document.querySelectorAll("div button");
+const answerButtons = document.querySelectorAll("div#answerButtons button");
 
 function compareToSolution(noteString){
     const currentNote = notesOnAllStrings[currentRandomNote.stringNumber][currentRandomNote.fret];
@@ -334,9 +334,11 @@ function displayQuestionMark(){
 }
 readingPracticeButton.addEventListener("click", displayQuestionMark)
 
+let activeStrings = [6];
 
 function randomNote() {
-    let a = Math.round((fretboard.strings.length - 1) * Math.random());
+    let numActiveStrings = activeStrings.length;
+    let a = activeStrings[Math.round((numActiveStrings - 1) * Math.random())] - 1;
     let b = Math.round(fretboard.numOfFrets * Math.random());
     return {
         stringNumber: a,
@@ -375,9 +377,24 @@ function scrollToRandomNote(currentRandomNote){
     })
     console.log("Fret:\t", currentRandomNote.fret , "xcoordinate:\t", fretCenters[currentRandomNote.fret] * fboard.scrollWidth / gitScale, "fretboard width:\t", fboard.scrollWidth);
 }
-/*
-console.log("registering service worker");
-if('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
+
+let stringTogglers = document.querySelectorAll("div#stringtogglers button");
+stringTogglers.forEach(element => {
+    element.addEventListener("click", toggleString);
+});
+
+function toggleString(event){
+    togglenumber = event.target.value;
+    let index = activeStrings.indexOf(Number(togglenumber));
+
+    if(index < 0){
+        activeStrings.push(Number(togglenumber));
+        this.setAttribute("class", "activeButton")
+        console.log("index was: ", index);
+    } else {
+        activeStrings.splice(index, 1)
+        this.setAttribute("class", "inactiveButton")
+        console.log("index was: ", index);
+
+    }
 }
-*/
