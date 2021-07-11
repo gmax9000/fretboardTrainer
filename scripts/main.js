@@ -202,6 +202,18 @@ for (let i = 0; i < fretboard.numOfFrets; i++) {
         dot.setAttribute("id", "dotAtFret_" + i); //can't override def attributes, do I need it?
 
         fretGroup.appendChild(dot)
+
+        let noteText = document.createElementNS(svgns, 'text');
+        noteText.setAttribute("fill", "black");
+        noteText.setAttribute("font-weight", "bold");
+        noteText.setAttribute("font-size", fretboard.fretWidth * 1.8);
+        let textNode = document.createTextNode(i);
+        noteText.appendChild(textNode);
+    
+        fretGroup.appendChild(noteText);
+        let bbox = noteText.getBBox();
+        noteText.setAttribute("x", fretCenters[i] - bbox.width / 2);
+        noteText.setAttribute("y", fretboard.width/2 + bbox.height / 4);
     }
 
     // place double dots at every 12th fret
